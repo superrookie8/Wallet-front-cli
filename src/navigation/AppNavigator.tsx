@@ -3,8 +3,8 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../pages/HomeScreen';
-import CreateWalletScreen from '../pages/create-wallet';
-import ImportWalletScreen from '../pages/import-wallet';
+import CreateWalletScreen from '../pages/CreateWallet';
+import ImportWalletScreen from '../pages/ImportWallet';
 import {RootStackParamList} from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
