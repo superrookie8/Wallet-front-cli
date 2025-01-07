@@ -1,28 +1,37 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {StyleSheet, TouchableOpacity, View, TextInput} from 'react-native';
 import {ThemedView} from '../components/ThemedView';
 import {ThemedText} from '../components/ThemedText';
-import {IconButton} from 'react-native-paper';
-// import Clipboard from '@react-native-clipboard/clipboard';
+import {WarningModal} from '../components/WarningModal';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import * as bip39 from 'bip39';
 
 export default function ImportWalletScreen() {
   const [seedPhrases, setSeedPhrases] = useState(Array(12).fill(''));
   const [isHidden, setIsHidden] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  useEffect(() => {
+    const mnemonic = bip39.generateMnemonic();
+    const phrases = mnemonic.split(' ');
+    setSeedPhrases(phrases);
+  }, []);
 
-  const handlePhraseChange = (text: string, index: number) => {
-    const newPhrases = [...seedPhrases];
-    newPhrases[index] = text;
-    setSeedPhrases(newPhrases);
+  // const handlePhraseChange = (text: string, index: number) => {
+  //   const newPhrases = [...seedPhrases];
+  //   newPhrases[index] = text;
+  //   setSeedPhrases(newPhrases);
+  // };
+
+  const handleCopyToClipboard = async () => {
+    try {
+      Clipboard.setString(seedPhrases.join(' '));
+      // 여기에 복사 성공 알림을 추가할 수 있습니다
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
   };
-
-  //   const handleCopyToClipboard = async () => {
-  //     try {
-  //       Clipboard.setString(seedPhrases.join(' '));
-  //       // 여기에 복사 성공 알림을 추가할 수 있습니다
-  //     } catch (error) {
-  //       console.error('Failed to copy:', error);
-  //     }
-  //   };
 
   return (
     <ThemedView style={styles.container}>
@@ -38,18 +47,12 @@ export default function ImportWalletScreen() {
         <View style={styles.formContainer}>
           <View style={styles.gridContainer}>
             {seedPhrases.map((phrase, index) => (
-              <View key={index} style={styles.inputContainer}>
+              <View key={index} style={styles.phraseContainer}>
                 <ThemedText style={styles.wordNumber}>{index + 1}</ThemedText>
-                <TextInput
-                  style={styles.input}
-                  value={phrase}
-                  onChangeText={text => handlePhraseChange(text, index)}
-                  placeholder={`Word ${index + 1}`}
-                  placeholderTextColor="#666"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  secureTextEntry={isHidden}
-                />
+                <ThemedText
+                  style={[styles.word, isHidden && styles.hiddenWord]}>
+                  {isHidden ? '••••••' : phrase}
+                </ThemedText>
               </View>
             ))}
           </View>
@@ -57,6 +60,12 @@ export default function ImportWalletScreen() {
           <TouchableOpacity
             style={styles.hideButton}
             onPress={() => setIsHidden(!isHidden)}>
+            <Icon
+              name={isHidden ? 'visibility-off' : 'visibility'}
+              size={20}
+              color="#007AFF"
+              style={styles.eyeIcon}
+            />
             <ThemedText style={styles.hideButtonText}>
               {isHidden ? 'Show' : 'Hide'} seed phrase
             </ThemedText>
@@ -64,14 +73,8 @@ export default function ImportWalletScreen() {
 
           <TouchableOpacity
             style={styles.copyButton}
-            // onPress={handleCopyToClipboard}
-          >
-            <IconButton
-              icon="content-copy"
-              size={24}
-              iconColor="#007AFF"
-              onPress={() => console.log('Icon pressed')}
-            />
+            onPress={handleCopyToClipboard}>
+            <ThemedText style={styles.copyIcon}>📋</ThemedText>
             <ThemedText style={styles.copyButtonText}>
               Copy to clipboard
             </ThemedText>
@@ -83,12 +86,15 @@ export default function ImportWalletScreen() {
               !seedPhrases.every(phrase => phrase.length > 0) &&
                 styles.disabledButton,
             ]}
+            onPress={() => setIsModalVisible(true)}
             disabled={!seedPhrases.every(phrase => phrase.length > 0)}>
-            <ThemedText style={styles.continueButtonText}>
-              Import Wallet
-            </ThemedText>
+            <ThemedText style={styles.continueButtonText}>Continue</ThemedText>
           </TouchableOpacity>
         </View>
+        <WarningModal
+          visible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+        />
       </ThemedView>
     </ThemedView>
   );
@@ -129,9 +135,19 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 30,
   },
-  inputContainer: {
+  phraseContainer: {
     width: '31%',
     marginBottom: 12,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+    padding: 12,
+  },
+  word: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  hiddenWord: {
+    letterSpacing: 2,
   },
   wordNumber: {
     color: '#666',
@@ -165,6 +181,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   hideButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     alignSelf: 'flex-start',
     marginBottom: 20,
   },
@@ -182,5 +201,11 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontSize: 16,
     marginLeft: 8,
+  },
+  copyIcon: {
+    fontSize: 20,
+  },
+  eyeIcon: {
+    marginRight: 4,
   },
 });

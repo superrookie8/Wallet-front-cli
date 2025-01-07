@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'EggverseWalletApp3' do
+target 'eggverse_wallet' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'EggverseWalletApp3' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'EggverseWalletApp3Tests' do
+  target 'EggverseWalletTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -37,4 +37,6 @@ target 'EggverseWalletApp3' do
       # :ccache_enabled => true
     )
   end
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 end

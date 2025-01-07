@@ -3,9 +3,11 @@ import {StyleSheet} from 'react-native';
 import {ThemedView} from '../components/ThemedView';
 import {ThemedText} from '../components/ThemedText';
 import {TextInput, TouchableOpacity, View} from 'react-native';
-import {Checkbox} from 'react-native-paper';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import {useNavigation} from '@react-navigation/native';
 
 export default function CreateWalletScreen() {
+  const navigation = useNavigation();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -63,14 +65,13 @@ export default function CreateWalletScreen() {
           />
 
           <View style={styles.checkboxContainer}>
-            <Checkbox
-              status={isAgreed ? 'checked' : 'unchecked'}
-              onPress={() => setIsAgreed(!isAgreed)}
-              color="#007AFF"
+            <BouncyCheckbox
+              isChecked={isAgreed}
+              onPress={isChecked => setIsAgreed(isChecked)}
+              fillColor="#007AFF"
+              textStyle={styles.checkboxLabel}
+              text="I agree to the terms of service"
             />
-            <ThemedText style={styles.checkboxLabel}>
-              I agree to the terms of service
-            </ThemedText>
           </View>
 
           <TouchableOpacity
@@ -139,6 +140,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
   },
+  checkboxLabel: {
+    fontSize: 16,
+    color: '#007AFF',
+  },
   visibilityButton: {
     padding: 4,
   },
@@ -155,10 +160,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
-  },
-  checkboxLabel: {
-    marginLeft: 8,
-    fontSize: 16,
   },
   createButton: {
     width: '100%',

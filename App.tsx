@@ -121,13 +121,16 @@
 // App.tsx
 import React from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {PaperProvider} from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaProvider>
-      <AppNavigator />
-    </SafeAreaProvider>
+    <PaperProvider>
+      <SafeAreaProvider>
+        <AppNavigator />
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
 

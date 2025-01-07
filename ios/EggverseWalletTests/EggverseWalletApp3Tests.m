@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface EggverseWalletApp3Tests : XCTestCase
+@interface eggverse_walletTests : XCTestCase
 
 @end
 
-@implementation EggverseWalletApp3Tests
+@implementation eggverse_walletTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

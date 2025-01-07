@@ -1,4 +1,4 @@
-package com.eggversewalletapp3
+package com.eggverse_wallet
 
 import android.app.Application
 import com.facebook.react.PackageList
