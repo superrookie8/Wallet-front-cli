@@ -7,25 +7,20 @@ import CreateWalletScreen from '../pages/CreateWallet';
 import ImportWalletScreen from '../pages/ImportWallet';
 import AccountScreen from '../pages/Account';
 import {RootStackParamList} from './types';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {TabNavigator} from './TabNavigator';
 
+const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="CreateWallet"
-          component={CreateWalletScreen}
-          options={{title: 'Create Wallet'}}
-        />
-        <Stack.Screen
-          name="ImportWallet"
-          component={ImportWalletScreen}
-          options={{title: 'Import Wallet'}}
-        />
-        <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="MainTabs" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
