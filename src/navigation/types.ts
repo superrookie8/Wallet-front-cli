@@ -5,4 +5,5 @@ export type RootStackParamList = {
   ImportWallet: undefined;
   Account: undefined;
   MainTabs: undefined;
+  Send: undefined;
 };

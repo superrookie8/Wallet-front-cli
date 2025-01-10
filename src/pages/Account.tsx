@@ -6,13 +6,21 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Pressable} from 'react-native';
 import {Image} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/types';
 
 export default function AccountScreen() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const walletAddress = '0x1234...5678';
   const [activeTab, setActiveTab] = useState('Token');
 
   const handleCopyAddress = () => {
     Clipboard.setString(walletAddress);
+  };
+  const handleSend = () => {
+    // navigation.navigate('Send');
   };
 
   return (
@@ -47,7 +55,8 @@ export default function AccountScreen() {
           </Pressable>
           <Pressable
             style={styles.actionButton}
-            android_ripple={{color: 'rgba(0, 0, 0, 0.1)'}}>
+            android_ripple={{color: 'rgba(0, 0, 0, 0.1)'}}
+            onPress={handleSend}>
             <Icon name="send" size={24} color="#007AFF" />
             <ThemedText style={styles.actionButtonText}>Send</ThemedText>
           </Pressable>
@@ -75,19 +84,34 @@ export default function AccountScreen() {
       {/* Tab Content */}
       <ScrollView style={styles.contentContainer}>
         {activeTab === 'Token' && (
-          <TouchableOpacity style={styles.listItem}>
-            <View style={styles.itemInfo}>
-              <Icon name="toll" size={32} color="#8247E5" />
-              <View style={styles.itemDetails}>
-                <ThemedText style={styles.itemName}>Polygon</ThemedText>
-                <ThemedText style={styles.itemAmount}>0 POL</ThemedText>
+          <>
+            <TouchableOpacity style={styles.listItem}>
+              <View style={styles.itemInfo}>
+                <Icon name="toll" size={32} color="#8247E5" />
+                <View style={styles.itemDetails}>
+                  <ThemedText style={styles.itemName}>Polygon</ThemedText>
+                  <ThemedText style={styles.itemAmount}>0 POL</ThemedText>
+                </View>
               </View>
-            </View>
-            <View style={styles.itemValues}>
-              <ThemedText style={styles.itemValue}>$0.00</ThemedText>
-              <ThemedText style={styles.itemSubValue}>$0.00</ThemedText>
-            </View>
-          </TouchableOpacity>
+              <View style={styles.itemValues}>
+                <ThemedText style={styles.itemValue}>$0.00</ThemedText>
+                <ThemedText style={styles.itemSubValue}>$0.00</ThemedText>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.listItem}>
+              <View style={styles.itemInfo}>
+                <Icon name="egg" size={32} color="#FFA500" />
+                <View style={styles.itemDetails}>
+                  <ThemedText style={styles.itemName}>EGGT</ThemedText>
+                  <ThemedText style={styles.itemAmount}>0 EGGT</ThemedText>
+                </View>
+              </View>
+              <View style={styles.itemValues}>
+                <ThemedText style={styles.itemValue}>$0.00</ThemedText>
+                <ThemedText style={styles.itemSubValue}>$0.00</ThemedText>
+              </View>
+            </TouchableOpacity>
+          </>
         )}
         {activeTab === 'NFT' && (
           <View style={styles.emptySection}>

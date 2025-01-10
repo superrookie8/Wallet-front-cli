@@ -6,6 +6,7 @@ import HomeScreen from '../pages/HomeScreen';
 import CreateWalletScreen from '../pages/CreateWallet';
 import ImportWalletScreen from '../pages/ImportWallet';
 import AccountScreen from '../pages/Account';
+import SendScreen from '../pages/Send';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,6 +50,16 @@ export function TabNavigator() {
         options={{
           tabBarIcon: ({color, size}) => (
             <Icon name="account-balance-wallet" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Send"
+        component={SendScreen}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <Icon name="send" size={size} color={color} />
           ),
         }}
       />
